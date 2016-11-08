@@ -7,13 +7,17 @@ import java.util.ArrayList;
  */
 public class Setup {
     public static ArrayList<Image> trainingData;
+    public static ArrayList<Image> testData;
+    public static ArrayList<Double> prob;
 
     public Setup() throws IOException{
         trainingData = new ArrayList<Image>();
+        testData = new ArrayList<Image>();
         readImage();
+        readTestData();
 
-//        System.out.println(trainingData.get(trainingData.size()-343) + " "+ trainingData.get(trainingData.size()-343).tureLabel);
-//        System.out.println(trainingData.get(4333).image.length);
+      //System.out.println(trainingData.get(trainingData.size()-343) + " "+ trainingData.get(trainingData.size()-343).tureLabel);
+      //System.out.println(testData.toString());
     }
 
 
@@ -45,11 +49,37 @@ public class Setup {
                 img[index] = tmp;
                 index++;
             }
-
-
-
         }
 
+    }
+
+    public static void readTestData() throws IOException{
+        BufferedReader reader = new BufferedReader(new FileReader("testimages"));
+        int index = 0;
+        String[] img = new String[28];
+        String tmp = "";
+        while(reader.ready()){
+
+            tmp = reader.readLine();
+
+            if(index == 27){
+
+                    img[index] = tmp;
+                    //String tmp2 = reader2.readLine();
+                    //int label = Integer.parseInt(tmp2);
+                    Image newImg = new Image(-1,generateImg(img));
+//                    System.out.println("===================================================");
+//                    System.out.println(newImg);
+//                    System.out.println("===================================================");
+                    testData.add(newImg);
+
+                index = 0;
+            }
+            else{
+                img[index] = tmp;
+                index++;
+            }
+        }
 
 
     }

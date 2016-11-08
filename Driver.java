@@ -9,7 +9,8 @@ public class Driver {
 
         Setup trainingData = new Setup();
 
-
+        Train test = new Train(Setup.trainingData, 2, 3);
 
     }
+
 }
