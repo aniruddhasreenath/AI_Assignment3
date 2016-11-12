@@ -14,13 +14,20 @@ public class Test {
 
     public ArrayList<Image> classifiedData;
 
+    public static double accuracy;
+
     public Test(HashMap<String, ArrayList<double[]>> know){
         classifiedData = new ArrayList<Image>();
         testData = Setup.testData;
         knowledge = know;
+        accuracy = 0.0;
 
         test();
-        printClassifiedData();
+
+        //TODO activate printClassifiedData to see the full list of classifications
+        System.out.println();
+        System.out.println("activate printClassifiedData to see the full list of classifications in the constructor of the Test.java class");
+        //printClassifiedData();
     }
 
     public void test(){
@@ -54,7 +61,7 @@ public class Test {
             }
 
         }
-            System.out.println("Accuracy: " + ((count/1000.0)*100.0) +"%");
+        accuracy = (count/1000.0)*100.0;
     }
 
     public double getProbabilityOFThisClass(char[][] img, int clas){
@@ -99,7 +106,6 @@ public class Test {
 
     public int generateSymbolKey(char sym){
 
-        //TODO THIS NOW ONLY REFLECTS HASHES AND DASHES
         if (sym == ' ') return  2;
         if (sym == '#') return  1;
         if (sym == '+') return  0;

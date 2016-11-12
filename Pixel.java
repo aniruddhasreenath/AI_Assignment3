@@ -18,10 +18,4 @@ public class Pixel {
         xCoord = x;
         yCoord = y;
     }
-
-    public void setProbabilities(char sym, ArrayList<Double> prob){
-
-        probabilities.put(sym, prob);
-
-    }
 }

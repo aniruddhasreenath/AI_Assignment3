@@ -32,8 +32,6 @@ public class Setup {
         readTestlables();
         readTestData();
 
-      //System.out.println(trainingData.get(trainingData.size()-343) + " "+ trainingData.get(trainingData.size()-343).tureLabel);
-      //System.out.println(testData.toString());
     }
 
 
@@ -54,9 +52,7 @@ public class Setup {
                     String tmp2 = reader2.readLine();
                     int label = Integer.parseInt(tmp2);
                     Image newImg = new Image(label,generateImg(img));
-//                    System.out.println("===================================================");
-//                    System.out.println(newImg);
-//                    System.out.println("===================================================");
+
                     numberOfImagesInTrainingClass[label] = numberOfImagesInTrainingClass[label] + 1;
                       trainingData.add(newImg);
                 }
@@ -84,12 +80,9 @@ public class Setup {
             if(index == 27){
 
                     img[index] = tmp;
-                    //String tmp2 = reader2.readLine();
-                    //int label = Integer.parseInt(tmp2);
+
                     Image newImg = new Image(-1,generateImg(img));
-//                    System.out.println("===================================================");
-//                    System.out.println(newImg);
-//                    System.out.println("===================================================");
+
                     testData.add(newImg);
 
                 index = 0;
@@ -125,7 +118,6 @@ public class Setup {
 
     public static void readTestlables()throws IOException{
         BufferedReader reader = new BufferedReader(new FileReader("testlabels"));
-        //BufferedReader reader2 = new BufferedReader((new FileReader("traininglabels")));
 
         String tmp = "";
         while(reader.ready()){
@@ -135,12 +127,7 @@ public class Setup {
             testlabels.add(Integer.parseInt(tmp));
 
             frequencyOfClassInTestData[Integer.parseInt(tmp)] = frequencyOfClassInTestData[Integer.parseInt(tmp)] + 1.0;
-
-
         }
 
-
     }
-
-
 }

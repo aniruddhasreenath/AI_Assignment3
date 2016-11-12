@@ -11,14 +11,16 @@ public class Train {
     public HashMap<String, ArrayList<double[]>> knowledge;
     public double valueOfK;
     public double valueOfV;
+    public static boolean isBinaryFeatured;
 
 
-    public Train(ArrayList<Image> img, double kVal, double V){
+    public Train(ArrayList<Image> img, double kVal, double V, boolean binary){
         posterior = new ArrayList<Pixel>();
         knowledge = new HashMap<String, ArrayList<double[]>>();
         images = img;
         valueOfK = kVal;
         valueOfV = V;
+        isBinaryFeatured = binary;
         learn();
         //printknowledge();
 
@@ -30,63 +32,24 @@ public class Train {
 
     }
 
-    //TODO REMOVE THIS MEHTOD
-    public double selectClass(char f, int i, int j, int clas){
-
-        ArrayList<Image> candidateList = new ArrayList<Image>();
-        int occurances = 0;
-        int total = 500;
-        double prob = 0.0;
-        //generate the cand list
-        for(int img = 0; img < images.size(); img++){
-            //check if this image is of this class
-            if(images.get(i).tureLabel == clas){
-                candidateList.add(images.get(i));
-            }
-        }
-
-        //iterate over the cand list and calculate probabilities of f
-        for(int cand = 0; cand < candidateList.size(); cand++){
-            Image tmp;
-
-            tmp = candidateList.get(i);
-
-            if(tmp.image[i][j] == f){
-                occurances++;
-            }
-        }
-
-        //applying the smoothing constant
-        prob = (occurances + valueOfK)/(total + (valueOfK*valueOfV));
-        return prob;
-    }
-
-
     public ArrayList<Image> generateCandidateList(int clas){
 
             ArrayList<Image> candidateList = new ArrayList<Image>();
-
-            double occurances = 0;
-            double total = 500;
-            double prob = 0.0;
 
             //generate the cand list
             for(int img = 0; img < images.size(); img++){
                 //check if this image is of this class
                 if(images.get(img).tureLabel == clas){
                     candidateList.add(images.get(img));
-                    //System.out.println("here ");
                 }
             }
             if (candidateList.size() == 0){
-                //System.out.println("ERROR: candidate list is empty");
+                System.out.println("ERROR: candidate list is empty");
             }
         return candidateList;
     }
 
     public void fillProbabilites(){
-
-
 
         for (int row = 0; row < 28; row++){
 
@@ -125,8 +88,11 @@ public class Train {
 
             //get the first image
             if(list.get(i).image[row][col] == '+'){
-                //TODO VERIFY THS (CHANGED THIS TO ONLY TAKE IN FOREGROUND VALUES)
-                plusOccur = plusOccur + 1.0;
+
+                if (!isBinaryFeatured){
+                    plusOccur = plusOccur + 1.0;
+                }
+
             }
             else if(list.get(i).image[row][col] == ' '){
 
@@ -143,7 +109,6 @@ public class Train {
         }
 
         //smoothing and calculate probs
-        //TODO DOES NOT CONSIDER THE OCCURANCE OF A PLUS ANYMORE
         probPlus = (plusOccur + valueOfK)/((Setup.numberOfImagesInTrainingClass[clas] + (valueOfV*valueOfK)));
         probHash = (hashOccur + valueOfK)/( (Setup.numberOfImagesInTrainingClass[clas] + (valueOfV*valueOfK)));
         probDash = (dashOccur + valueOfK)/(Setup.numberOfImagesInTrainingClass[clas] + (valueOfV*valueOfK));
@@ -158,10 +123,10 @@ public class Train {
     public  void printknowledge() {
         for (int row = 0; row < 28; row++) {
             for (int col = 0; col < 28; col++) {
+
                 String key = Integer.toString(row) + Integer.toString(col);
 
                 for (int i = 0; i < knowledge.get(key).size(); i++) {
-                    //System.out.println(knowledge.get(key).size());
 
                     for (int j = 0; j < knowledge.get(key).get(i).length; j++) {
 
@@ -170,13 +135,8 @@ public class Train {
                                 + col + " Class: " + i + " Symbol: " + j + " Prob: " + knowledge.get(key).get(i)[j]
                                 + " KEY USED: " + key);
 
-
                     }
-
-
                 }
-
-
             }
         }
     }

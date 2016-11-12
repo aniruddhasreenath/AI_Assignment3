@@ -9,12 +9,13 @@ public class Driver {
 
         Setup trainingData = new Setup();
 
-        Train train = new Train(Setup.trainingData, 0.1, 3);
+        Train train = new Train(Setup.trainingData, 0.1, 3, false);
 
         Test testing = new Test(train.knowledge);
 
         ConfusionMatrix mat = new ConfusionMatrix(testing.classifiedData);
 
+        Odds odds = new Odds(train.knowledge);
 
     }
 

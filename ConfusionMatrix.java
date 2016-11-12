@@ -65,6 +65,16 @@ public class ConfusionMatrix {
 
     public void printMatrix(){
 
+        System.out.println();
+        if(Train.isBinaryFeatured){
+            System.out.println("Accuracy: " + (Test.accuracy) +"%" + " (BINARY FEATURE VALUES USED)");
+        }
+        else{
+
+            System.out.println("Accuracy: " + (Test.accuracy) +"%" + " (TERNARY FEATURE VALUES USED)");
+        }
+        System.out.println();
+        System.out.println("Printing Confusion Matrix...");
         for(int i = 0; i < 10 ; i++){
 
             for (int j = 0; j < 10; j++){
@@ -75,8 +85,5 @@ public class ConfusionMatrix {
             }
             System.out.println();
         }
-
-
-
     }
 }
