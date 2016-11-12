@@ -3,7 +3,7 @@
  */
 public class Image implements Comparable<Image> {
 
-    public int tureLabel;
+    public double tureLabel;
     public char[][] image;
 
     public Image(int lab, char[][] img){

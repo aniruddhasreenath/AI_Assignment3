@@ -9,25 +9,28 @@ public class Train {
     public ArrayList<Pixel> posterior;
     public ArrayList<Image> images;
     public HashMap<String, ArrayList<double[]>> knowledge;
-    public int valueOfK;
-    public int valueOfV;
+    public double valueOfK;
+    public double valueOfV;
 
 
-    public Train(ArrayList<Image> img, int kVal, int V){
+    public Train(ArrayList<Image> img, double kVal, double V){
         posterior = new ArrayList<Pixel>();
         knowledge = new HashMap<String, ArrayList<double[]>>();
         images = img;
         valueOfK = kVal;
         valueOfV = V;
         learn();
+        //printknowledge();
+
     }
 
     public void learn(){
 
         fillProbabilites();
-        //System.out.println(knowledge.get("").toString());
+
     }
 
+    //TODO REMOVE THIS MEHTOD
     public double selectClass(char f, int i, int j, int clas){
 
         ArrayList<Image> candidateList = new ArrayList<Image>();
@@ -72,22 +75,28 @@ public class Train {
                 //check if this image is of this class
                 if(images.get(img).tureLabel == clas){
                     candidateList.add(images.get(img));
+                    //System.out.println("here ");
                 }
+            }
+            if (candidateList.size() == 0){
+                //System.out.println("ERROR: candidate list is empty");
             }
         return candidateList;
     }
 
     public void fillProbabilites(){
 
-        ArrayList<double[]> probMap = new ArrayList<double[]>();
+
 
         for (int row = 0; row < 28; row++){
 
             for (int col = 0; col < 28; col++){
-
+                ArrayList<double[]> probMap = new ArrayList<double[]>();
                 //get first coordinate
                 for(int i = 0; i < 10; i ++){
-                    double[] newProb = probability(generateCandidateList(i), row, col);
+                    //get all the images that correspond to this class from generateCanditList method
+                    double[] newProb = probability(generateCandidateList(i), row, col, i);
+
                     probMap.add(newProb);
                 }
 
@@ -99,7 +108,7 @@ public class Train {
     }
 
 
-    public double[] probability(ArrayList<Image> list, int row, int col){
+    public double[] probability(ArrayList<Image> list, int row, int col, int clas){
 
         double plusOccur = 0;
         double dashOccur = 0;
@@ -116,29 +125,60 @@ public class Train {
 
             //get the first image
             if(list.get(i).image[row][col] == '+'){
-
-                plusOccur++;
+                //TODO VERIFY THS (CHANGED THIS TO ONLY TAKE IN FOREGROUND VALUES)
+                plusOccur = plusOccur + 1.0;
             }
             else if(list.get(i).image[row][col] == ' '){
 
-                dashOccur++;
+                dashOccur = dashOccur + 1.0;
             }
             else if(list.get(i).image[row][col] == '#'){
 
-                hashOccur++;
+                hashOccur = hashOccur + 1.0;
+            }
+            else{
+                System.out.println("Error "+list.get(i).image[row][col]);
             }
 
         }
 
         //smoothing and calculate probs
-        probPlus = (plusOccur + valueOfK)/(500 + (valueOfV*valueOfK));
-        probHash = (hashOccur + valueOfK)/(500 + (valueOfV*valueOfK));
-        probDash = (dashOccur + valueOfK)/(500 + (valueOfV*valueOfK));
+        //TODO DOES NOT CONSIDER THE OCCURANCE OF A PLUS ANYMORE
+        probPlus = (plusOccur + valueOfK)/((Setup.numberOfImagesInTrainingClass[clas] + (valueOfV*valueOfK)));
+        probHash = (hashOccur + valueOfK)/( (Setup.numberOfImagesInTrainingClass[clas] + (valueOfV*valueOfK)));
+        probDash = (dashOccur + valueOfK)/(Setup.numberOfImagesInTrainingClass[clas] + (valueOfV*valueOfK));
 
-        double[] probabilityAtPos = {probPlus, probHash, probDash};
+
+        double[] probabilityAtPos = {probPlus,probHash, probDash};
 
         return probabilityAtPos;
 
+    }
+
+    public  void printknowledge() {
+        for (int row = 0; row < 28; row++) {
+            for (int col = 0; col < 28; col++) {
+                String key = Integer.toString(row) + Integer.toString(col);
+
+                for (int i = 0; i < knowledge.get(key).size(); i++) {
+                    //System.out.println(knowledge.get(key).size());
+
+                    for (int j = 0; j < knowledge.get(key).get(i).length; j++) {
+
+
+                        System.out.println("Coordinate: " + row + ":"
+                                + col + " Class: " + i + " Symbol: " + j + " Prob: " + knowledge.get(key).get(i)[j]
+                                + " KEY USED: " + key);
+
+
+                    }
+
+
+                }
+
+
+            }
+        }
     }
 }
 

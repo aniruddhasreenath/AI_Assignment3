@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Sreenath on 6/11/2016.
@@ -9,11 +11,25 @@ public class Setup {
     public static ArrayList<Image> trainingData;
     public static ArrayList<Image> testData;
     public static ArrayList<Double> prob;
+    public static double[] numberOfImagesInTrainingClass;
+
+    public static double[] frequencyOfClassInTestData;
+    public static ArrayList<Integer> testlabels;
 
     public Setup() throws IOException{
         trainingData = new ArrayList<Image>();
         testData = new ArrayList<Image>();
+        numberOfImagesInTrainingClass = new double[10];
+        Arrays.fill(numberOfImagesInTrainingClass, 0);
+
+        testlabels = new ArrayList<Integer>();
+
+        frequencyOfClassInTestData = new double[10];
+        Arrays.fill(frequencyOfClassInTestData, 0);
+
         readImage();
+
+        readTestlables();
         readTestData();
 
       //System.out.println(trainingData.get(trainingData.size()-343) + " "+ trainingData.get(trainingData.size()-343).tureLabel);
@@ -41,6 +57,7 @@ public class Setup {
 //                    System.out.println("===================================================");
 //                    System.out.println(newImg);
 //                    System.out.println("===================================================");
+                    numberOfImagesInTrainingClass[label] = numberOfImagesInTrainingClass[label] + 1;
                       trainingData.add(newImg);
                 }
                 index = 0;
@@ -52,6 +69,8 @@ public class Setup {
         }
 
     }
+
+
 
     public static void readTestData() throws IOException{
         BufferedReader reader = new BufferedReader(new FileReader("testimages"));
@@ -103,5 +122,25 @@ public class Setup {
         }
         return img;
     }
+
+    public static void readTestlables()throws IOException{
+        BufferedReader reader = new BufferedReader(new FileReader("testlabels"));
+        //BufferedReader reader2 = new BufferedReader((new FileReader("traininglabels")));
+
+        String tmp = "";
+        while(reader.ready()){
+
+            tmp = reader.readLine();
+
+            testlabels.add(Integer.parseInt(tmp));
+
+            frequencyOfClassInTestData[Integer.parseInt(tmp)] = frequencyOfClassInTestData[Integer.parseInt(tmp)] + 1.0;
+
+
+        }
+
+
+    }
+
 
 }
