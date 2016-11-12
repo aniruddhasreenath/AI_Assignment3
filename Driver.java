@@ -7,19 +7,23 @@ public class Driver {
 
     public static void main(String[] args) throws IOException{
 
-        Setup trainingData = new Setup();
+        //sets up the environment
+        new Setup();
 
-        Train train = new Train(Setup.trainingData, 0.1, 3, true);
+        //trains on the data
+        Train learn = new Train(Setup.trainingData, 0.1, 3, false);
 
-        Test testing = new Test(train.knowledge);
+        //tests for classification accuracy
+        Test test = new Test(learn.knowledge);
 
-        ConfusionMatrix mat = new ConfusionMatrix(testing.classifiedData);
+        //generates evaluation metric
+        new ConfusionMatrix(test.classifiedData);
 
-        Odds odds1 = new Odds(train.knowledge, 1, 8, true);
-
-        Odds odds2 = new Odds(train.knowledge, 2, 3, true);
-        Odds odds3 = new Odds(train.knowledge, 4, 5, true);
-        Odds odds4 = new Odds(train.knowledge, 6, 9, true);
+        //generates odds ratios
+        new Odds(learn.knowledge, 1, 8, true);
+        new Odds(learn.knowledge, 2, 3, true);
+        new Odds(learn.knowledge, 4, 5, true);
+        new Odds(learn.knowledge, 6, 9, true);
 
     }
 
