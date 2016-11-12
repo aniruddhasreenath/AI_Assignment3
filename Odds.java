@@ -9,13 +9,13 @@ public class Odds {
 
     public double[][] oddsRatios;
 
-    public Odds(HashMap<String, ArrayList<double[]>> learnedData){
+    public Odds(HashMap<String, ArrayList<double[]>> learnedData, int cls1, int cls2, boolean printOdds){
         knowledge = new HashMap<String, ArrayList<double[]>>();
         oddsRatios = new double[28][28];
         knowledge = learnedData;
 
-        genereateOddsRatios(1,8);
-        printOdds();
+        genereateOddsRatios(cls1,cls2);
+        if(printOdds)printOdds(cls1, cls2);
     }
 
     public void genereateOddsRatios(int c1, int c2){
@@ -45,9 +45,9 @@ public class Odds {
         }
     }
 
-    public void printOdds(){
+    public void printOdds(int a, int b){
         System.out.println();
-        System.out.println("Printing Odds Ratios...");
+        System.out.println("Printing Odds Ratios..." + " [" +a+" , " + b+ "] ");
         for(int i = 0; i < 28 ; i++){
 
             for (int j = 0; j < 28; j++){
