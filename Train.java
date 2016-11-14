@@ -92,6 +92,9 @@ public class Train {
                 if (!isBinaryFeatured){
                     plusOccur = plusOccur + 1.0;
                 }
+                else{
+                    hashOccur = hashOccur + 1.0;
+                }
 
             }
             else if(list.get(i).image[row][col] == ' '){
